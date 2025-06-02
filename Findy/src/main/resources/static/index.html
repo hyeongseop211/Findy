@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Findy - 뉴스 검색 엔진</title>
+    <meta name="description" content="Findy는 AI 기반 뉴스 검색 엔진입니다. 빠르고 정확한 뉴스 검색을 경험해보세요.">
+    
+    <link rel="icon" href="/images/Findy_logo.png" type="image/png">
+    
+    <!-- CSS 파일들 분리 -->
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+    <!-- 헤더 include -->
+    <div id="header-container"></div>
+
+    <!-- 메인 콘텐츠 -->
+    <main class="main-content">
+        <div class="content-header">
+            <h2 class="content-title">최신 뉴스</h2>
+            <p class="content-subtitle">AI 기반 검색으로 정확하고 빠른 뉴스를 만나보세요</p>
+        </div>
+
+        <!-- 기사 그리드 (더미 데이터) -->
+        <div class="news-grid" id="newsGrid">
+            <!-- 기사 카드들이 JavaScript로 동적 생성됩니다 -->
+        </div>
+    </main>
+
+    <!-- 푸터 include -->
+    <div id="footer-container"></div>
+
+    <script>
+        // 헤더와 푸터 로드
+        async function loadIncludes() {
+            try {
+                // 헤더 로드
+                const headerResponse = await fetch('/includes/header.html');
+                const headerHtml = await headerResponse.text();
+                document.getElementById('header-container').innerHTML = headerHtml;
+                
+                // 푸터 로드
+                const footerResponse = await fetch('/includes/footer.html');
+                const footerHtml = await footerResponse.text();
+                document.getElementById('footer-container').innerHTML = footerHtml;
+                
+                // 헤더 로드 후 이벤트 리스너 설정
+                setupEventListeners();
+            } catch (error) {
+                console.error('Include 파일 로드 오류:', error);
+            }
+        }
+
+        // API 설정
+        const API_BASE = '/api/search';
+        
+        // 상태 관리
+        let currentCategory = '전체';
+        let isLoading = false;
+        
+        // 실제 뉴스 데이터 변수
+        let newsData = [];
+        
+        // 페이지 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            loadIncludes().then(() => {
+                initializePage();
+            });
+        });
+        
+        // 페이지 초기화 함수
+        function initializePage() {
+            loadLatestNews();
+            loadPopularSearches();
+        }
+        
+        // 최신 뉴스 로드 (전체 카테고리)
+        async function loadLatestNews() {
+            try {
+                showLoading();
+                
+                // 최신 뉴스를 위한 일반적인 검색어 사용
+                const response = await fetch(`${API_BASE}?q=뉴스&page=0&size=10`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    newsData = data.content || [];
+                    renderNews(newsData);
+                    updateContentHeader(newsData.length, data.totalElements);
+                } else {
+                    throw new Error('뉴스 로드 실패');
+                }
+            } catch (error) {
+                console.error('뉴스 로드 오류:', error);
+                showErrorMessage('뉴스를 불러오는 중 오류가 발생했습니다.');
+                // 오류 발생 시 더미 데이터 표시
+                loadDummyData();
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // 카테고리별 뉴스 로드
+        async function loadNewsByCategory(category) {
+            if (category === '전체') {
+                loadLatestNews();
+                return;
+            }
+            
+            try {
+                showLoading();
+                currentCategory = category;
+                
+                // 카테고리에 맞는 검색어 매핑
+                const categoryKeywords = {
+                    '경제': '경제',
+                    '오피니언': '오피니언',
+                    '사회': '사회',
+                    '건강': '건강',
+                    '연예/문화': '연예',
+                    '스포츠': '스포츠'
+                };
+                
+                const keyword = categoryKeywords[category] || category;
+                const response = await fetch(`${API_BASE}?q=${encodeURIComponent(keyword)}&page=0&size=10&category=${encodeURIComponent(category)}`);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    newsData = data.content || [];
+                    renderNews(newsData);
+                    updateContentHeader(newsData.length, data.totalElements, category);
+                } else {
+                    throw new Error('카테고리 뉴스 로드 실패');
+                }
+            } catch (error) {
+                console.error('카테고리 뉴스 로드 오류:', error);
+                showErrorMessage(`${category} 뉴스를 불러오는 중 오류가 발생했습니다.`);
+                // 오류 발생 시 해당 카테고리 더미 데이터 표시
+                filterDummyByCategory(category);
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // 인기 검색어 로드
+        async function loadPopularSearches() {
+            try {
+                const response = await fetch(`${API_BASE}/popular`);
+                if (response.ok) {
+                    const popularQueries = await response.json();
+                    showPopularQueries(popularQueries);
+                }
+            } catch (error) {
+                console.error('인기 검색어 로드 오류:', error);
+                // 인기 검색어 로드 실패 시 숨김
+            }
+        }
+        
+        // 인기 검색어 표시
+        function showPopularQueries(queries) {
+            const popularContainer = document.querySelector('.content-subtitle');
+            if (queries && queries.length > 0) {
+                const popularHtml = `
+                    <div style="margin-top: 1rem;">
+                        <span style="font-weight: 600; margin-right: 1rem;">🔥 인기 검색어:</span>
+                        ${queries.slice(0, 5).map(query => `
+                            <button onclick="searchByPopular('${query}')" 
+                                    style="background: linear-gradient(45deg, #6B73FF, #87CEEB); color: white; 
+                                           border: none; padding: 0.3rem 0.8rem; border-radius: 15px; 
+                                           margin-right: 0.5rem; cursor: pointer; font-size: 0.8rem;">
+                                ${query}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                popularContainer.innerHTML += popularHtml;
+            }
+        }
+        
+        // 인기 검색어로 검색
+        function searchByPopular(query) {
+            document.getElementById('searchInput').value = query;
+            performSearch(query);
+        }
+        
+        // 검색 수행
+        async function performSearch(query, category = '') {
+            if (!query?.trim()) return;
+            
+            try {
+                showLoading();
+                
+                let searchUrl = `${API_BASE}?q=${encodeURIComponent(query)}&page=0&size=10`;
+                if (category) {
+                    searchUrl += `&category=${encodeURIComponent(category)}`;
+                }
+                
+                const response = await fetch(searchUrl);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    newsData = data.content || [];
+                    renderNews(newsData);
+                    updateContentHeader(newsData.length, data.totalElements, null, query);
+                } else {
+                    throw new Error('검색 실패');
+                }
+            } catch (error) {
+                console.error('검색 오류:', error);
+                showErrorMessage('검색 중 오류가 발생했습니다.');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // 메인 뉴스 카드 생성 함수
+        function createMainNewsCard(news, cardType = 'primary') {
+            const title = news.title || '제목 없음';
+            const content = news.content || news.summary || '내용 없음';
+            const category = news.category || '일반';
+            const publishedAt = news.publishedAt || news.date || new Date().toISOString().split('T')[0];
+            const tags = news.tags || [];
+            const url = news.url || '#';
+            
+            return `
+                <article class="main-news-card ${cardType}" onclick="openNewsDetail('${url}')">
+                    <div class="main-news-meta">
+                        <span class="main-news-category">${category}</span>
+                        <span class="main-news-date">${formatDate(publishedAt)}</span>
+                    </div>
+                    <h2 class="main-news-title">${truncateText(title, cardType === 'primary' ? 80 : 60)}</h2>
+                    <p class="main-news-summary">${truncateText(content, cardType === 'primary' ? 200 : 150)}</p>
+                    ${tags.length > 0 ? `
+                        <div class="main-news-tags">
+                            ${tags.slice(0, cardType === 'primary' ? 4 : 3).map(tag => `<span class="main-news-tag">${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </article>
+            `;
+        }
+
+        // 사이드 뉴스 카드 생성 함수
+        function createSideNewsCard(news) {
+            const title = news.title || '제목 없음';
+            const content = news.content || news.summary || '내용 없음';
+            const category = news.category || '일반';
+            const publishedAt = news.publishedAt || news.date || new Date().toISOString().split('T')[0];
+            const tags = news.tags || [];
+            const url = news.url || '#';
+            
+            return `
+                <article class="side-news-card" onclick="openNewsDetail('${url}')">
+                    <div class="side-news-meta">
+                        <span class="side-news-category">${category}</span>
+                        <span class="side-news-date">${formatDate(publishedAt)}</span>
+                    </div>
+                    <h3 class="side-news-title">${truncateText(title, 50)}</h3>
+                    <p class="side-news-summary">${truncateText(content, 80)}</p>
+                    ${tags.length > 0 ? `
+                        <div class="side-news-tags">
+                            ${tags.slice(0, 2).map(tag => `<span class="side-news-tag">${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </article>
+            `;
+        }
+
+        // 일반 뉴스 카드 생성 함수 (API 응답에 맞게 수정)
+        function createNewsCard(news) {
+            const title = news.title || '제목 없음';
+            const content = news.content || news.summary || '내용 없음';
+            const category = news.category || '일반';
+            const publishedAt = news.publishedAt || news.date || new Date().toISOString().split('T')[0];
+            const tags = news.tags || [];
+            const url = news.url || '#';
+            
+            return `
+                <article class="news-card" onclick="openNewsDetail('${url}')">
+                    <div class="news-meta">
+                        <span class="news-category">${category}</span>
+                        <span class="news-date">${formatDate(publishedAt)}</span>
+                    </div>
+                    <h3 class="news-title">${truncateText(title, 60)}</h3>
+                    <p class="news-summary">${truncateText(content, 120)}</p>
+                    ${tags.length > 0 ? `
+                        <div class="news-tags">
+                            ${tags.slice(0, 3).map(tag => `<span class="news-tag">${tag}</span>`).join('')}
+                        </div>
+                    ` : ''}
+                </article>
+            `;
+        }
+        
+        // 뉴스 그리드 렌더링 (사이드 기사 증가, 추가 기사 2개 제한)
+        function renderNews(newsData) {
+            const newsGrid = document.getElementById('newsGrid');
+            
+            if (newsData.length === 0) {
+                newsGrid.innerHTML = `
+                    <div style="text-align: center; padding: 3rem;">
+                        <h3 style="color: #6B73FF; margin-bottom: 1rem;">검색 결과가 없습니다</h3>
+                        <p style="color: rgba(74, 85, 104, 0.7);">다른 검색어나 카테고리를 시도해보세요.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let layoutHtml = '';
+
+            // 메인 뉴스 섹션 (왼쪽 사이드 + 중앙 메인 1개 + 추가 뉴스 + 오른쪽 사이드)
+            if (newsData.length >= 1) {
+                const mainNews = newsData[0]; // 첫 번째만 메인으로
+                const leftSideNews = newsData.slice(1, 4); // 2-4번째를 왼쪽 사이드로 (3개)
+                const rightSideNews = newsData.slice(4, 7); // 5-7번째를 오른쪽 사이드로 (3개)
+                const additionalNews = newsData.slice(7, 9); // 8-9번째만 추가 뉴스 (2개 제한)
+
+                layoutHtml += `
+                    <div class="main-news-section">
+                        <!-- 왼쪽 사이드 뉴스 -->
+                        ${leftSideNews.length > 0 ? `
+                            <div class="side-news-container left">
+                                ${leftSideNews.map(news => createSideNewsCard(news)).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        <!-- 중앙 메인 뉴스 + 추가 뉴스 그리드 -->
+                        <div class="center-news-container">
+                            ${createMainNewsCard(mainNews, 'primary')}
+                            
+                            <!-- 추가 뉴스 그리드 (중앙 영역, 2개 제한) -->
+                            ${additionalNews.length > 0 ? `
+                                <div class="additional-news-grid">
+                                    ${additionalNews.map(news => createNewsCard(news)).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- 오른쪽 사이드 뉴스 -->
+                        ${rightSideNews.length > 0 ? `
+                            <div class="side-news-container right">
+                                ${rightSideNews.map(news => createSideNewsCard(news)).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            newsGrid.innerHTML = layoutHtml;
+        }
+        
+        // 카테고리 필터링
+        function filterByCategory(category) {
+            currentCategory = category;
+            
+            // 활성 카테고리 표시
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const activeItem = document.querySelector(`[data-category="${category}"]`);
+            if (activeItem) {
+                activeItem.classList.add('active');
+            }
+            
+            // 실제 API 호출
+            loadNewsByCategory(category);
+        }
+        
+        // 콘텐츠 헤더 업데이트
+        function updateContentHeader(displayCount, totalCount = null, category = null, query = null) {
+            const contentTitle = document.querySelector('.content-title');
+            const contentSubtitle = document.querySelector('.content-subtitle');
+            
+            if (query) {
+                contentTitle.textContent = `"${query}" 검색 결과`;
+                contentSubtitle.innerHTML = `${displayCount}개의 뉴스를 찾았습니다${totalCount ? ` (전체 ${totalCount.toLocaleString()}개)` : ''}`;
+            } else if (category && category !== '전체') {
+                contentTitle.textContent = `${category} 뉴스`;
+                contentSubtitle.innerHTML = `${displayCount}개의 ${category} 뉴스${totalCount ? ` (전체 ${totalCount.toLocaleString()}개)` : ''}`;
+            } else {
+                contentTitle.textContent = '최신 뉴스';
+                contentSubtitle.innerHTML = 'AI 기반 검색으로 정확하고 빠른 뉴스를 만나보세요';
+            }
+        }
+        
+        // 로딩 표시
+        function showLoading() {
+            if (isLoading) return;
+            isLoading = true;
+            
+            const newsGrid = document.getElementById('newsGrid');
+            newsGrid.innerHTML = `
+                <div style="text-align: center; padding: 4rem;">
+                    <div style="display: inline-block; width: 60px; height: 60px; border: 4px solid rgba(107, 115, 255, 0.2); 
+                                border-top: 4px solid #6B73FF; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <h3 style="margin-top: 2rem; color: #6B73FF; font-size: 1.2rem;">뉴스를 불러오는 중...</h3>
+                    <p style="margin-top: 0.5rem; color: rgba(74, 85, 104, 0.7);">잠시만 기다려주세요</p>
+                </div>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+            `;
+        }
+        
+        // 로딩 숨김
+        function hideLoading() {
+            isLoading = false;
+        }
+        
+        // 오류 메시지 표시
+        function showErrorMessage(message) {
+            const newsGrid = document.getElementById('newsGrid');
+            newsGrid.innerHTML = `
+                <div style="text-align: center; padding: 4rem; max-width: 500px; margin: 0 auto;">
+                    <div style="background: linear-gradient(45deg, #e53e3e, #ff6b6b); -webkit-background-clip: text; 
+                                -webkit-text-fill-color: transparent; font-size: 3rem; margin-bottom: 1.5rem;">⚠️</div>
+                    <h3 style="color: #e53e3e; margin-bottom: 1rem; font-size: 1.3rem;">오류가 발생했습니다</h3>
+                    <p style="color: rgba(74, 85, 104, 0.7); margin-bottom: 2rem; line-height: 1.6;">${message}</p>
+                    <button onclick="loadLatestNews()" 
+                            style="background: linear-gradient(45deg, #6B73FF, #87CEEB); color: white; 
+                                   border: none; padding: 1rem 2rem; border-radius: 30px; cursor: pointer;
+                                   font-size: 1rem; font-weight: 600; transition: all 0.3s ease;
+                                   box-shadow: 0 8px 25px rgba(107, 115, 255, 0.3);"
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 12px 35px rgba(107, 115, 255, 0.4)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(107, 115, 255, 0.3)'">
+                        🔄 다시 시도
+                    </button>
+                </div>
+            `;
+        }
+        
+        // 유틸리티 함수들
+        function truncateText(text, maxLength) {
+            if (!text) return '';
+            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ko-KR', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+        
+        // 뉴스 상세 보기
+        function openNewsDetail(url) {
+            if (url && url !== '#') {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+        }
+        
+        // 이벤트 리스너 설정
+        function setupEventListeners() {
+            // 카테고리 클릭 이벤트
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.dataset.category;
+                    filterByCategory(category);
+                });
+            });
+
+            // 검색 폼 이벤트
+            const searchForm = document.getElementById('searchForm');
+            if (searchForm) {
+                searchForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const query = document.getElementById('searchInput').value.trim();
+                    const category = document.getElementById('categorySelect').value;
+                    if (query) {
+                        performSearch(query, category);
+                    }
+                });
+            }
+
+            // 실시간 검색 (옵션 - 부하가 클 수 있으므로 디바운스 적용)
+            let searchTimeout;
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.trim();
+                    
+                    clearTimeout(searchTimeout);
+                    
+                    if (query.length >= 2) {
+                        searchTimeout = setTimeout(() => {
+                            const category = document.getElementById('categorySelect').value;
+                            performSearch(query, category);
+                        }, 500); // 500ms 디바운스
+                    } else if (query.length === 0) {
+                        loadLatestNews();
+                    }
+                });
+            }
+        }
+        
+        // 더미 데이터 (API 실패 시 백업용)
+        const dummyNews = [
+            {
+                category: "정치",
+                title: "국회에서 새로운 법안 통과, 경제 회복 기대감 상승",
+                content: "오늘 국회에서 통과된 새로운 경제 활성화 법안으로 인해 내년 경제 성장률이 크게 개선될 것으로 전망됩니다.",
+                publishedAt: "2025-06-02",
+                tags: ["국회", "법안", "경제회복"],
+                url: "#"
+            },
+            {
+                category: "경제",
+                title: "주요 기업들 실적 호조, 코스피 상승세 지속",
+                content: "이번 분기 주요 기업들의 실적이 예상을 웃돌면서 증시가 강세를 보이고 있습니다. 특히 IT 및 바이오 섹터에서 두드러진 성과를 나타내며 투자자들의 관심이 집중되고 있습니다.",
+                publishedAt: "2025-06-02",
+                tags: ["주식", "실적", "코스피", "IT"],
+                url: "#"
+            },
+            {
+                category: "사회",
+                title: "전국 대학교 새 학기 시작, 대면 수업 확대",
+                content: "전국 대학교들이 새 학기를 맞아 대면 수업을 크게 확대하기로 결정했습니다. 학생들과 교수진은 정상적인 캠퍼스 생활로의 복귀를 환영하며, 다양한 교육 프로그램들이 재개될 예정입니다.",
+                publishedAt: "2025-06-02",
+                tags: ["대학교", "새학기", "대면수업"],
+                url: "#"
+            },
+            {
+                category: "오피니언",
+                title: "AI 시대, 우리가 준비해야 할 것들",
+                content: "인공지능 기술이 급속도로 발전하면서 우리 사회에 미치는 영향이 점점 커지고 있습니다. 교육부터 일자리까지, 변화에 대비한 준비가 필요합니다.",
+                publishedAt: "2025-06-01",
+                tags: ["AI", "미래", "준비"],
+                url: "#"
+            },
+            {
+                category: "건강",
+                title: "겨울철 건강관리, 면역력 강화 방법",
+                content: "겨울철 건강을 위해서는 규칙적인 운동과 충분한 수면, 균형 잡힌 영양섭취가 중요합니다. 전문가들이 제시하는 면역력 강화 방법을 알아봅시다.",
+                publishedAt: "2025-06-01",
+                tags: ["건강", "면역력", "겨울"],
+                url: "#"
+            },
+            {
+                category: "연예/문화",
+                title: "K-POP 새로운 글로벌 트렌드 주도",
+                content: "한국 아이돌 그룹들이 전 세계 음악 차트를 석권하며 새로운 문화 트렌드를 만들어가고 있습니다. 글로벌 팬들의 열띤 반응이 이어지고 있습니다.",
+                publishedAt: "2025-06-01",
+                tags: ["K-POP", "한류", "글로벌"],
+                url: "#"
+            },
+            {
+                category: "스포츠",
+                title: "프로야구 시즌 개막, 팬들의 뜨거운 관심",
+                content: "2025년 프로야구 시즌이 개막되면서 각 팀의 새로운 전력과 기대주들에게 관심이 집중되고 있습니다. 올해는 특히 치열한 경쟁이 예상됩니다.",
+                publishedAt: "2025-05-31",
+                tags: ["야구", "시즌개막", "프로야구"],
+                url: "#"
+            },
+            {
+                category: "문화",
+                title: "전지적 독자 시점 실사화 개봉",
+                content: "2025년 7월 초 인기작품 전지적 독자 시점의 실사화 영화가 개봉됩니다.",
+                publishedAt: "2025-05-31",
+                tags: ["문화", "웹툰툰", "영화"],
+                url: "#"
+            },
+            {
+                category: "경제",
+                title: "부동산 시장 안정화 조짐, 전문가 분석",
+                content: "최근 부동산 시장에 안정화 신호가 나타나고 있다고 전문가들이 분석했습니다. 정부 정책의 효과가 서서히 나타나고 있는 것으로 보입니다.",
+                publishedAt: "2025-05-31",
+                tags: ["부동산", "안정화", "정책"],
+                url: "#"
+            }
+        ];
+        
+        // 더미 데이터 로드 (백업용)
+        function loadDummyData() {
+            newsData = dummyNews;
+            renderNews(dummyNews);
+            updateContentHeader(dummyNews.length, null, null, '더미 데이터');
+        }
+        
+        // 더미 데이터 카테고리 필터링 (백업용)
+        function filterDummyByCategory(category) {
+            const filtered = category === '전체' ? dummyNews : dummyNews.filter(news => news.category === category);
+            renderNews(filtered);
+            updateContentHeader(filtered.length, null, category);
+        }
+    </script>
+</body>
+</html> 
