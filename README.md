@@ -80,7 +80,7 @@
 
 5. **브라우저에서 접속**
    ```
-   http://localhost:8080
+   http://localhost:8485
    ```
 
 ### Docker로 실행 (선택사항)
@@ -165,7 +165,7 @@ src/
 spring.application.name=search-engine
 
 # Server Configuration
-server.port=8080
+server.port=8485
 
 # MongoDB Configuration
 spring.data.mongodb.host=localhost
