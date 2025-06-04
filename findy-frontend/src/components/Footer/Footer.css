@@ -3,10 +3,10 @@
    ============================================== */
 
 .footer {
-    background: linear-gradient(135deg, var(--background-white), var(--background-light));
-    border-top: 2px solid rgba(135, 206, 235, 0.3);
+    background: linear-gradient(135deg, var(--text-primary), #1A202C);
+    color: white;
+    padding: 3rem 2rem 2rem;
     margin-top: 4rem;
-    padding: 3rem 0 1rem;
 }
 
 .footer-container {
@@ -27,6 +27,33 @@
     flex-direction: column;
 }
 
+/* 소셜 미디어 링크 */
+.footer-social {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, var(--primary-blue), var(--light-blue));
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--shadow-heavy);
+}
+
+/* 타이틀 */
 .footer-title {
     font-size: 1.8rem;
     font-weight: 800;
@@ -37,8 +64,9 @@
     margin-bottom: 1rem;
 }
 
+/* 설명 */
 .footer-description {
-    color: var(--text-secondary);
+    color: rgb(255, 255, 255);
     line-height: 1.6;
     font-size: 0.95rem;
 }
@@ -46,10 +74,11 @@
 .footer-subtitle {
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--light-blue);
     margin-bottom: 1rem;
 }
 
+/* 링크 */
 .footer-links {
     list-style: none;
     padding: 0;
@@ -61,7 +90,7 @@
 }
 
 .footer-link {
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.6);
     text-decoration: none;
     font-size: 0.9rem;
     transition: all 0.3s ease;
@@ -78,8 +107,9 @@
     text-align: center;
 }
 
+/* 저작권 */
 .copyright {
-    color: var(--text-secondary);
+    color:rgba(255, 255, 255, 0.8);;
     font-size: 0.85rem;
     margin: 0;
 }
