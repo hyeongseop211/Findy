@@ -1,95 +1,6 @@
 /* ==============================================
-   메인 콘텐츠 및 뉴스 관련 스타일
+   뉴스 카드 스타일
    ============================================== */
-
-/* 메인 콘텐츠 */
-.main-content {
-    max-width: 75%;
-    margin: 0 auto;
-    padding: 2rem;
-    margin-top: 1rem;
-}
-
-.content-header {
-    margin-bottom: 2rem;
-    text-align: center;
-}
-
-.content-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-}
-
-.content-subtitle {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-}
-
-/* 기사 그리드 */
-.news-wrapper {
-    display: block;
-    margin-top: 2rem;
-}
-
-/* 여백 공간 스타일 - fixed로 변경 */
-.side-space {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    width: calc((100vw - 90%) / 2 - 2rem);
-    min-height: 300px;
-    max-height: 70vh;
-    background: linear-gradient(135deg, rgba(107, 115, 255, 0.08), rgba(135, 206, 235, 0.08));
-    border: 2px dashed rgba(135, 206, 235, 0.4);
-    border-radius: 20px;
-    color: rgba(74, 85, 104, 0.6);
-    font-size: 1rem;
-    font-weight: 500;
-    text-align: center;
-    transition: all 0.3s ease;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.side-space:hover {
-    background: linear-gradient(135deg, rgba(107, 115, 255, 0.12), rgba(135, 206, 235, 0.12));
-    border-color: rgba(107, 115, 255, 0.3);
-    color: rgba(74, 85, 104, 0.8);
-}
-
-.left-space {
-    left: 1rem;
-}
-
-.right-space {
-    right: 1rem;
-}
-
-.news-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-/* 메인 뉴스 섹션 */
-.main-news-section {
-    display: flex;
-    gap: 2rem;
-    align-items: flex-start;
-    margin-bottom: 2rem;
-}
-
-/* 중앙 메인 뉴스 컨테이너 */
-.center-news-container {
-    flex: 2.5;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
 
 /* 메인 뉴스 카드 (중앙) */
 .main-news-card {
@@ -205,26 +116,6 @@
     border-color: rgba(107, 115, 255, 0.4);
 }
 
-/* 사이드 뉴스 컨테이너 (왼쪽, 오른쪽) */
-.side-news-container {
-    flex: 1.8;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.side-news-container.left {
-    order: 1;
-}
-
-.center-news-container {
-    order: 2;
-}
-
-.side-news-container.right {
-    order: 3;
-}
-
 /* 사이드 뉴스 카드 (양쪽) */
 .side-news-card {
     background: linear-gradient(145deg, var(--background-white), var(--background-light));
@@ -301,14 +192,7 @@
     border: 1px solid rgba(135, 206, 235, 0.3);
 }
 
-/* 추가 뉴스 그리드 */
-.additional-news-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.2rem;
-    margin-top: 2rem;
-}
-
+/* 일반 뉴스 카드 */
 .news-card {
     background: linear-gradient(145deg, var(--background-white), var(--background-light));
     border-radius: 20px;
@@ -316,6 +200,7 @@
     border: 2px solid rgba(135, 206, 235, 0.2);
     transition: all 0.3s ease;
     box-shadow: 0 8px 25px var(--shadow-light);
+    cursor: pointer;
 }
 
 .news-card:hover {
@@ -384,24 +269,6 @@
 
 /* 반응형 디자인 */
 @media (max-width: 1024px) {
-    .main-news-section {
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .side-news-container.left,
-    .side-news-container.right {
-        order: 3;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1rem;
-    }
-
-    .center-news-container {
-        order: 1;
-        gap: 1.5rem;
-    }
-
     .main-news-card {
         padding: 1.5rem;
     }
@@ -416,16 +283,6 @@
 }
 
 @media (max-width: 768px) {
-    .main-content {
-        padding: 1rem;
-        max-width: 95%;
-    }
-
-    .additional-news-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
     .main-news-title {
         font-size: 1.3rem;
     }
@@ -441,11 +298,6 @@
     .main-news-card.secondary .main-news-summary {
         font-size: 0.9rem;
     }
-
-    .side-news-container.left,
-    .side-news-container.right {
-        display: none;
-    }
     
     .main-news-card {
         padding: 1.5rem;
@@ -453,10 +305,5 @@
     
     .side-news-card {
         padding: 1.2rem;
-    }
-    
-    /* 모바일에서는 여백 공간 숨김 */
-    .side-space {
-        display: none;
     }
 } 
