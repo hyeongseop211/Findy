@@ -45,12 +45,14 @@ cd Findy-main/Findy
 ./gradlew bootRun
 ```
 ```react
+cd Findy-main/findy-frontend
 npm install
 npm start
 ```
 
 ### 2. 웹 브라우저에서 접속
 - **메인 페이지**: http://localhost:8485/
+- react **메인 페이지**: http://localhost:3000/
 - **검색 페이지**: http://localhost:8485/search
 
 ### 3. API 엔드포인트 테스트
