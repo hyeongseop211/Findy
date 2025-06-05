@@ -44,6 +44,10 @@
 cd Findy-main/Findy
 ./gradlew bootRun
 ```
+```react
+npm install
+npm start
+```
 
 ### 2. 웹 브라우저에서 접속
 - **메인 페이지**: http://localhost:8485/
