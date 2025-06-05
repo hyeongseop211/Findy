@@ -13,7 +13,7 @@ interface NewsArticle {
 
 interface NewsCardProps {
   article: NewsArticle;
-  cardType: 'main-primary' | 'main-secondary' | 'side' | 'normal';
+  cardType: 'main-primary' | 'main-secondary' | 'side' | 'normal' | 'list';
   onClick: (article: NewsArticle) => void;
 }
 
@@ -41,6 +41,8 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, cardType, onClick }) => {
         return 'side-news-card';
       case 'normal':
         return 'news-card';
+      case 'list':
+        return 'list-news-card';
       default:
         return 'news-card';
     }
@@ -94,6 +96,26 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, cardType, onClick }) => {
     </div>
   );
 
+  const renderListCard = () => (
+    <div className={getCardClassName()} onClick={handleClick}>
+      <div className="list-news-content">
+        <div className="list-news-main">
+          <div className="list-news-meta">
+            <span className="list-news-category">{article.category}</span>
+            <span className="list-news-date">{formatDate(article.publishedAt)}</span>
+          </div>
+          <h3 className="list-news-title">{article.title}</h3>
+          <p className="list-news-summary">{article.content}</p>
+        </div>
+        <div className="list-news-tags">
+          {article.tags.map((tag, index) => (
+            <span key={index} className="list-news-tag">{tag}</span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
   switch (cardType) {
     case 'main-primary':
       return renderMainCard(true);
@@ -103,6 +125,8 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, cardType, onClick }) => {
       return renderSideCard();
     case 'normal':
       return renderNormalCard();
+    case 'list':
+      return renderListCard();
     default:
       return renderNormalCard();
   }

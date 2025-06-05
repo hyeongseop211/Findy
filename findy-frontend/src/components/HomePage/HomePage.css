@@ -111,6 +111,12 @@
     right: 1rem;
 }
 
+.side-space-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 .news-grid {
     display: flex;
     flex-direction: column;

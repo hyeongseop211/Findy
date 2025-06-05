@@ -9,6 +9,7 @@ interface SearchSuggestion {
 
 const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
@@ -18,8 +19,8 @@ const Header: React.FC = () => {
   const location = useLocation();
 
   const categories = [
-    '전체', '정치', '경제', '사회', '오피니언', 
-    '건강', '연예/문화', '스포츠'
+    '전체', '경제', '오피니언', '사회', '건강', 
+    '연예/문화', '스포츠'
   ];
 
   // 자동완성 데이터 로드
@@ -67,7 +68,8 @@ const Header: React.FC = () => {
 
   const handleSearch = (query: string) => {
     if (query.trim()) {
-      navigate(`/search?q=${encodeURIComponent(query.trim())}`);
+      const categoryParam = selectedCategory ? `&category=${encodeURIComponent(selectedCategory)}` : '';
+      navigate(`/search?q=${encodeURIComponent(query.trim())}${categoryParam}`);
       setShowSuggestions(false);
       setSearchQuery('');
     }
@@ -118,6 +120,10 @@ const Header: React.FC = () => {
     }
   };
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(e.target.value);
+  };
+
   const handlePopularSearchClick = (query: string) => {
     handleSearch(query);
   };
@@ -127,93 +133,113 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="header">
+    <header className="fixed-header">
       <div className="header-container">
-        {/* 로고 섹션 */}
-        <div className="logo-section" onClick={handleLogoClick}>
-          <img src="/images/Findy_logo.png" alt="Findy Logo" className="logo" />
-          <div className="logo-text">
-            <h1 className="site-title">Findy</h1>
-            <p className="subtitle">AI 기반 뉴스 검색 엔진</p>
+        {/* 상단 영역: 로고 + 검색창 + 오른쪽 영역 */}
+        <div className="header-top">
+          {/* 왼쪽 로고 영역 */}
+          <div className="header-left">
+            <div className="logo-container" onClick={handleLogoClick}>
+              <img src="/images/Findy_logo.png" alt="Findy Logo" className="header-logo" />
+            </div>
+          </div>
+          
+          {/* 중앙 검색창 영역 */}
+          <div className="header-center">
+            <div className="header-search">
+              <form className="search-form" onSubmit={(e) => { e.preventDefault(); handleSearch(searchQuery); }}>
+                <div className="search-input-container">
+                  <select 
+                    id="categorySelect" 
+                    className="category-select-inner"
+                    value={selectedCategory}
+                    onChange={handleCategoryChange}
+                  >
+                    <option value="">전체</option>
+                    <option value="경제">경제</option>
+                    <option value="오피니언">오피니언</option>
+                    <option value="사회">사회</option>
+                    <option value="건강">건강</option>
+                    <option value="연예/문화">연예/문화</option>
+                    <option value="스포츠">스포츠</option>
+                  </select>
+                  <div className="search-divider"></div>
+                  <input 
+                    ref={searchInputRef}
+                    type="text" 
+                    id="searchInput" 
+                    className="search-input-inner" 
+                    placeholder="뉴스, 키워드, 주제를 검색해보세요..." 
+                    value={searchQuery}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
+                    onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
+                    autoComplete="off"
+                  />
+                  <button type="submit" className="search-btn">
+                    🔍
+                  </button>
+                </div>
+                
+                {/* 자동완성 드롭다운 */}
+                {showSuggestions && suggestions.length > 0 && (
+                  <div className="suggestions-dropdown">
+                    {suggestions.map((suggestion, index) => (
+                      <div
+                        key={index}
+                        className={`suggestion-item ${
+                          index === selectedSuggestionIndex ? 'selected' : ''
+                        }`}
+                        onClick={() => handleSearch(suggestion.query)}
+                      >
+                        <span className="suggestion-text">{suggestion.query}</span>
+                        {suggestion.count && (
+                          <span className="suggestion-count">{suggestion.count}</span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </form>
+            </div>
+          </div>
+          
+          {/* 오른쪽 영역 */}
+          <div className="header-right">
+            <div className="user-actions">
+              <button className="action-btn" title="알림">
+                🔔
+              </button>
+              <button className="action-btn" title="북마크">
+                📚
+              </button>
+              <button className="action-btn" title="설정">
+                ⚙️
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* 검색 섹션 */}
-        <div className="search-section">
-          <div className="search-container">
-            <div className="search-input-wrapper">
-              <input
-                ref={searchInputRef}
-                type="text"
-                className="search-input"
-                placeholder="검색어를 입력하세요..."
-                value={searchQuery}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                onFocus={() => searchQuery.length >= 2 && setShowSuggestions(true)}
-              />
-              <button 
-                className="search-button"
-                onClick={() => handleSearch(searchQuery)}
-              >
-                🔍
-              </button>
-              
-              {/* 자동완성 드롭다운 */}
-              {showSuggestions && suggestions.length > 0 && (
-                <div className="suggestions-dropdown">
-                  {suggestions.map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className={`suggestion-item ${
-                        index === selectedSuggestionIndex ? 'selected' : ''
-                      }`}
-                      onClick={() => handleSearch(suggestion.query)}
-                    >
-                      <span className="suggestion-text">{suggestion.query}</span>
-                      {suggestion.count && (
-                        <span className="suggestion-count">{suggestion.count}</span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* 인기 검색어 */}
-          {popularSearches.length > 0 && (
-            <div className="popular-searches">
-              <span className="popular-label">🔥 인기:</span>
-              {popularSearches.map((search, index) => (
-                <button
-                  key={index}
-                  className="popular-tag"
-                  onClick={() => handlePopularSearchClick(search)}
-                >
-                  {search}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* 카테고리 네비게이션 */}
-          <nav className="category-nav">
+        
+        {/* 하단 영역: 카테고리 네비게이션 */}
+        <nav className="header-nav">
+          <div className="category-list">
             {categories.map((category) => (
-              <button
-                key={category}
+              <a 
+                href="#" 
+                key={category} 
                 className={`category-item ${
                   (location.pathname === '/' && category === '전체') ||
                   location.search.includes(`category=${encodeURIComponent(category)}`)
                     ? 'active' : ''
                 }`}
-                onClick={() => handleCategoryClick(category)}
+                data-category={category}
+                onClick={(e) => { e.preventDefault(); handleCategoryClick(category); }}
               >
                 {category}
-              </button>
+              </a>
             ))}
-          </nav>
-        </div>
+          </div>
+        </nav>
       </div>
     </header>
   );

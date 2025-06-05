@@ -22,11 +22,11 @@ const HomePage: React.FC = () => {
   const dummyNews: NewsArticle[] = [
     {
       id: '1',
-      category: "정치",
-      title: "국회에서 새로운 법안 통과, 경제 회복 기대감 상승",
-      content: "오늘 국회에서 통과된 새로운 경제 활성화 법안으로 인해 내년 경제 성장률이 크게 개선될 것으로 전망됩니다. 전문가들은 이번 법안이 중소기업 지원과 일자리 창출에 큰 도움이 될 것이라고 분석했습니다.",
+      category: "해킹",
+      title: "이제부터 여긴 정종현 갤러리다",
+      content: "하루 한번 정종현을 바라보고 하루 두번 정종현이 있는 쪽으로 절해라",
       publishedAt: "2025-01-22",
-      tags: ["국회", "법안", "경제회복", "일자리"],
+      tags: ["믿음", "신앙", "종교", "헛소리"],
       url: "#"
     },
     {
@@ -177,7 +177,8 @@ const HomePage: React.FC = () => {
         <div className="news-wrapper">
           {/* 왼쪽 여백 공간 */}
           <div className="side-space left-space">
-            <p>광고 또는 추가 콘텐츠 영역</p>
+          <img src="/images/jjh1.jpg" alt="Findy Logo" className="side-space-image" />
+            {/* <p>광고 또는 추가 콘텐츠 영역</p> */}
           </div>
           
           {/* 뉴스 그리드 */}
@@ -258,7 +259,8 @@ const HomePage: React.FC = () => {
           
           {/* 오른쪽 여백 공간 */}
           <div className="side-space right-space">
-            <p>광고 또는 추가 콘텐츠 영역</p>
+          <img src="/images/jjh2.jpg" alt="Findy Logo" className="side-space-image" />
+            {/* <p>광고 또는 추가 콘텐츠 영역</p> */}
           </div>
         </div>
       </div>

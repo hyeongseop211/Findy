@@ -249,6 +249,7 @@
     color: rgba(74, 85, 104, 0.8);
     line-height: 1.6;
     margin-bottom: 1rem;
+    font-size: 0.95rem;
 }
 
 .news-tags {
@@ -261,10 +262,98 @@
     background: rgba(135, 206, 235, 0.2);
     color: var(--primary-blue);
     padding: 0.3rem 0.8rem;
-    border-radius: 20px;
+    border-radius: 15px;
     font-size: 0.8rem;
     font-weight: 500;
     border: 1px solid rgba(135, 206, 235, 0.3);
+}
+
+/* 리스트형 뉴스 카드 */
+.list-news-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #eaeaea;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.list-news-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    border-color: #d0d0d0;
+}
+
+.list-news-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.list-news-main {
+    flex: 1;
+}
+
+.list-news-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.list-news-category {
+    background: linear-gradient(45deg, var(--primary-blue), var(--light-blue));
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+.list-news-date {
+    color: #666;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.list-news-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: #333;
+    line-height: 1.4;
+    transition: color 0.3s ease;
+}
+
+.list-news-card:hover .list-news-title {
+    color: var(--primary-blue);
+}
+
+.list-news-summary {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.list-news-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.list-news-tag {
+    background: #f5f5f5;
+    color: #444;
+    padding: 0.3rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid #eaeaea;
 }
 
 /* 반응형 디자인 */
@@ -272,38 +361,50 @@
     .main-news-card {
         padding: 1.5rem;
     }
-
+    
     .main-news-title {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
     }
     
     .main-news-card.secondary .main-news-title {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
     }
 }
 
 @media (max-width: 768px) {
     .main-news-title {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
     }
-
+    
     .main-news-card.secondary .main-news-title {
         font-size: 1.2rem;
     }
-
+    
     .main-news-summary {
         font-size: 0.95rem;
     }
-
+    
     .main-news-card.secondary .main-news-summary {
         font-size: 0.9rem;
     }
     
     .main-news-card {
-        padding: 1.5rem;
+        padding: 1.2rem;
     }
     
     .side-news-card {
         padding: 1.2rem;
+    }
+    
+    .list-news-card {
+        padding: 1.2rem;
+    }
+    
+    .list-news-title {
+        font-size: 1.2rem;
+    }
+    
+    .list-news-summary {
+        font-size: 0.9rem;
     }
 } 
