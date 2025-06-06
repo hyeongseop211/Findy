@@ -56,6 +56,29 @@ Findy-main/
 cd findy-crawler
 pip install -r requirements.txt
 ```
+<details>
+<summary>requirements.txt</summary>
+
+# 웹 크롤링 관련
+requests>=2.25.0
+beautifulsoup4>=4.9.0
+selenium>=4.0.0
+lxml>=4.6.0
+
+# 데이터베이스 연결
+pymongo>=4.0.0
+
+# 텍스트 처리 및 분석 (기본 패키지만)
+konlpy==0.6.0  
+scikit-learn==1.3.2  
+
+# 웹 서버 (API 제공용)
+fastapi>=0.68.0
+uvicorn>=0.15.0
+
+# 기타 유틸리티
+python-dotenv>=0.19.0
+schedule>=1.1.0 
 
 **React 프론트엔드:**
 ```bash
