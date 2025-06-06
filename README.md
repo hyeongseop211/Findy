@@ -5,7 +5,7 @@
 # Architecture: React(3000) + Spring Boot(8485) + MongoDB(27017)
 # ===========================================
 
-# 기본 애플리케이션 설정
+/*# 기본 애플리케이션 설정*/
 spring.application.name=Findy
 server.port=8485
 
