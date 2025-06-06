@@ -1,3 +1,36 @@
+<details>
+<summary>application.properties</summary>
+# ===========================================
+# Findy 뉴스 검색 엔진 - Spring Boot 설정
+# Architecture: React(3000) + Spring Boot(8485) + MongoDB(27017)
+# ===========================================
+
+# 기본 애플리케이션 설정
+spring.application.name=Findy
+server.port=8485
+
+# MongoDB 설정 (핵심!)
+spring.data.mongodb.uri=mongodb://localhost:27017/newsdata
+
+# CORS 설정 (React 연동)
+spring.web.cors.allowed-origins=http://localhost:3000
+spring.web.cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
+spring.web.cors.allowed-headers=*
+
+# 로깅 설정
+logging.level.com.boot=DEBUG
+logging.level.org.springframework.data.mongodb=DEBUG
+logging.pattern.console=[%d{yyyy-MM-dd HH:mm:ss}] [%level] %logger{36} - %msg%n
+
+# JPA 비활성화 (MongoDB 사용으로 불필요)
+spring.jpa.hibernate.ddl-auto=none
+spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+# 향후 확장을 위한 설정 (주석 처리)
+#spring.elasticsearch.rest.uris=http://localhost:9200
+#spring.kafka.bootstrap-servers=localhost:9092
+</details>
+
 # 🔍 Findy - 실시간 뉴스 검색 엔진
 
 **MongoDB + Spring Boot + React + Python 크롤러**를 활용한 종합 뉴스 검색 플랫폼
@@ -59,24 +92,24 @@ pip install -r requirements.txt
 <details>
 <summary>requirements.txt</summary>
 
-# 웹 크롤링 관련
+### 웹 크롤링 관련
 requests>=2.25.0
 beautifulsoup4>=4.9.0
 selenium>=4.0.0
 lxml>=4.6.0
 
-# 데이터베이스 연결
+### 데이터베이스 연결
 pymongo>=4.0.0
 
-# 텍스트 처리 및 분석 (기본 패키지만)
+### 텍스트 처리 및 분석 (기본 패키지만)
 konlpy==0.6.0  
 scikit-learn==1.3.2  
 
-# 웹 서버 (API 제공용)
+### 웹 서버 (API 제공용)
 fastapi>=0.68.0
 uvicorn>=0.15.0
 
-# 기타 유틸리티
+### 기타 유틸리티
 python-dotenv>=0.19.0
 schedule>=1.1.0 
 </details>
@@ -420,19 +453,7 @@ git commit -m "feat: 새로운 기능 추가"
 git push origin feature/새로운기능이름
 ```
 
-### 📋 **기여 가이드라인**
-- **코드 스타일**: 기존 코드 컨벤션 준수
-- **테스트**: 새 기능 추가 시 테스트 코드 작성
-- **문서화**: README 및 주석 업데이트
-- **이슈**: 버그 발견 시 GitHub Issues 등록
 
-## 📝 라이선스
-
-이 프로젝트는 MIT 라이선스 하에 배포됩니다.
-
-## 📞 문의
-
-프로젝트 관련 문의사항이 있으시면 이슈를 등록해 주세요.
 
 ---
 
