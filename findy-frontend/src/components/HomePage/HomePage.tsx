@@ -177,8 +177,8 @@ const HomePage: React.FC = () => {
         <div className="news-wrapper">
           {/* 왼쪽 여백 공간 */}
           <div className="side-space left-space">
-          <img src="/images/jjh1.jpg" alt="Findy Logo" className="side-space-image" />
-            {/* <p>광고 또는 추가 콘텐츠 영역</p> */}
+          {/* <img src="/images/jjh1.jpg" alt="Findy Logo" className="side-space-image" /> */}
+            <p>광고 또는 추가 콘텐츠 영역</p>
           </div>
           
           {/* 뉴스 그리드 */}
@@ -259,8 +259,8 @@ const HomePage: React.FC = () => {
           
           {/* 오른쪽 여백 공간 */}
           <div className="side-space right-space">
-          <img src="/images/jjh2.jpg" alt="Findy Logo" className="side-space-image" />
-            {/* <p>광고 또는 추가 콘텐츠 영역</p> */}
+          {/* <img src="/images/jjh2.jpg" alt="Findy Logo" className="side-space-image" /> */}
+            <p>광고 또는 추가 콘텐츠 영역</p>
           </div>
         </div>
       </div>

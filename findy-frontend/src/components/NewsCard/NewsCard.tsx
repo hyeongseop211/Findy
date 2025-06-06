@@ -57,7 +57,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, cardType, onClick }) => {
       <h3 className="main-news-title">{article.title}</h3>
       <p className="main-news-summary">{article.content}</p>
       <div className="main-news-tags">
-        {article.tags.map((tag, index) => (
+        {article.tags && article.tags.map((tag, index) => (
           <span key={index} className="main-news-tag">{tag}</span>
         ))}
       </div>
@@ -73,7 +73,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, cardType, onClick }) => {
       <h4 className="side-news-title">{article.title}</h4>
       <p className="side-news-summary">{article.content}</p>
       <div className="side-news-tags">
-        {article.tags.slice(0, 3).map((tag, index) => (
+        {article.tags && article.tags.slice(0, 3).map((tag, index) => (
           <span key={index} className="side-news-tag">{tag}</span>
         ))}
       </div>
@@ -89,7 +89,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, cardType, onClick }) => {
       <h4 className="news-title">{article.title}</h4>
       <p className="news-summary">{article.content}</p>
       <div className="news-tags">
-        {article.tags.slice(0, 4).map((tag, index) => (
+        {article.tags && article.tags.slice(0, 4).map((tag, index) => (
           <span key={index} className="news-tag">{tag}</span>
         ))}
       </div>
@@ -108,7 +108,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, cardType, onClick }) => {
           <p className="list-news-summary">{article.content}</p>
         </div>
         <div className="list-news-tags">
-          {article.tags.map((tag, index) => (
+          {article.tags && article.tags.map((tag, index) => (
             <span key={index} className="list-news-tag">{tag}</span>
           ))}
         </div>

@@ -48,6 +48,8 @@ const SearchPage: React.FC = () => {
       params.append('page', currentPage.toString());
       params.append('size', '10');
 
+      // api 적용시
+      // const response = await fetch(`http://localhost:8485/api/search?${params.toString()}`);
       const response = await fetch(`/api/search?${params.toString()}`);
       
       if (response.ok) {
@@ -60,11 +62,10 @@ const SearchPage: React.FC = () => {
       }
     } catch (error) {
       console.error('검색 오류:', error);
-      // 더미 데이터로 대체
-      const dummyResult = generateDummyResults();
-      setSearchResults(dummyResult.content);
-      setTotalResults(dummyResult.totalElements);
-      setTotalPages(dummyResult.totalPages);
+      // 검색 실패 시 빈 결과 표시
+      setSearchResults([]);
+      setTotalResults(0);
+      setTotalPages(0);
     } finally {
       setIsLoading(false);
     }
