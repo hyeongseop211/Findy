@@ -79,6 +79,7 @@ uvicorn>=0.15.0
 # 기타 유틸리티
 python-dotenv>=0.19.0
 schedule>=1.1.0 
+</details>
 
 **React 프론트엔드:**
 ```bash
