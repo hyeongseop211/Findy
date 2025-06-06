@@ -5,28 +5,22 @@
 # Architecture: React(3000) + Spring Boot(8485) + MongoDB(27017)
 # ===========================================
 
-/*# 기본 애플리케이션 설정*/
 spring.application.name=Findy
 server.port=8485
 
-# MongoDB 설정 (핵심!)
 spring.data.mongodb.uri=mongodb://localhost:27017/newsdata
 
-# CORS 설정 (React 연동)
 spring.web.cors.allowed-origins=http://localhost:3000
 spring.web.cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
 spring.web.cors.allowed-headers=*
 
-# 로깅 설정
 logging.level.com.boot=DEBUG
 logging.level.org.springframework.data.mongodb=DEBUG
 logging.pattern.console=[%d{yyyy-MM-dd HH:mm:ss}] [%level] %logger{36} - %msg%n
 
-# JPA 비활성화 (MongoDB 사용으로 불필요)
 spring.jpa.hibernate.ddl-auto=none
 spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
-# 향후 확장을 위한 설정 (주석 처리)
 #spring.elasticsearch.rest.uris=http://localhost:9200
 #spring.kafka.bootstrap-servers=localhost:9092
 </details>
