@@ -199,6 +199,7 @@ schedule>=1.1.0
 ```bash
 cd findy-frontend
 npm install
+npm start
 ```
 **백엔드**
 1. **MongoDB, Elasticsearch, Monstache시작**
