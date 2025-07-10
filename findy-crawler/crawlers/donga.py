@@ -1,6 +1,7 @@
 import requests
 import time
 
+from datetime import datetime
 from bs4 import BeautifulSoup
 from komoran import komoran # 형태소
 from tfidf import tf_idf # TF-IDF
@@ -11,6 +12,7 @@ from mongo_save import save_to_mongodb # MongoDB
 def fetch_headlines(category,page):
     page = (page*10)+1
     f_url = f"https://www.donga.com/news/{category}?p={page}&prod=news&ymd=&m="
+    # print(f_url)
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
     }
@@ -22,6 +24,7 @@ def fetch_headlines(category,page):
         news_headlines = []
 
         articles_div = soup.select_one("div.divide_area > section.sub_news_sec")
+        # print(articles_div)
         articles = articles_div.select("div.news_body > h4.tit > a")
         
         for article in articles:
@@ -58,14 +61,29 @@ def fetch_article_content(article_url):
         else:
             headline = "제목 없음"
 
-        # 텍스트 내용이 태그들과 있어서 내용만 뽑아내기
+        # 크롤링할 section
         content_tag = soup.select_one("section.news_view")
+
+        # 이미지 추출
+        img_tag = content_tag.select_one("img")
+        img = img_tag.get("src")
+
+        # 텍스트 내용이 태그들과 있어서 내용만 뽑아내기
         if content_tag:
             clean_text = content_tag.get_text(separator=' ', strip=True)
 
         # 보도시간 추출
         date_items = soup.select('span[aria-hidden="true"]')
         last_time = date_items[-1].text.strip()
+
+        last_time = last_time.replace('.','-')
+
+        try:
+            dt = datetime.strptime(last_time, "%Y-%m-%d %H:%M")
+            last_time = dt.strftime("%Y-%m-%dT%H:%M:00.000Z")
+            print(last_time)
+        except ValueError:
+            print("시간 형식 오류:", last_time)
 
         if clean_text:
             # print(f"내용: {clean_text}\n")
@@ -84,6 +102,7 @@ def fetch_article_content(article_url):
 
         return {
             "headline": headline,
+            "img":img,
             "content": clean_text,
             "tfidf_keywords": tfidf_keywords,
             "textrank_keywords": textrank_kw,
@@ -98,21 +117,38 @@ def fetch_article_content(article_url):
         print(f"본문 크롤링 오류: {e}")
         return None
 
+    
+def convert_category(cat):
+    for key in category_mapping:
+        if key in cat:
+            return category_mapping[key]
+    return cat
+
 # 실행 흐름
 # donga 전용 매핑
 category_mapping = {
-    "Economy": "economy",
-    "Opinion": "opinion",
-    "Society": "society",
-    "Health": "health",
-    "Sports": "sports",
-    "Culture": "culture",
-    "Entertainment": "culture"
+    "Economy": "경제",
+    "Series": "오피니언",
+    "Society/70040100000001": "사회",
+    "Society/70040100000009": "사회",
+    "Society/70040100000002": "사회",
+    "Society/70040100000019": "사회",
+    "Society/70040100000278": "사회",
+    "Society/70040100000034": "사회",
+    "Society/70010000000260": "사회",
+    "Health": "건강",
+    "Sports": "스포츠",
+    "Culture": "연예/문화",
+    "Entertainment": "연예/문화"
 }
-categories = ["Economy", "Opinion", "Society", "Health", "Sports", "Culture", "Entertainment"]
+# category_list = ["70040100000001","70040100000009","70040100000002","70040100000019","70040100000278","70040100000034","70010000000260"]
+# categories = ["Economy", "Series", "Society", "Health", "Sports", "Culture", "Entertainment"]
+
+categories = ["Economy", "Series", "Society/70040100000001", "Society/70040100000009", "Society/70040100000002", "Society/70040100000019", "Society/70040100000278", "Society/70040100000034", "Society/70010000000260", "Health", "Sports", "Culture", "Entertainment"]
 # categories = ["Economy"]
 data = []
 for category in categories:
+    print("donga - ", category)
     # 반복할 페이지 수
     for i in range(1):
         headlines = fetch_headlines(category, i)
@@ -123,7 +159,12 @@ for category in categories:
 
                 if article:
                     # 출력전에 교체
-                    converted_category = category_mapping.get(category, category)
+                    converted_category = convert_category(category)
+                    article["category"] = converted_category
+
+                    print("결과 => ")
+                    for key, value in article.items():
+                        print(f"{key}:\n{value}\n")
 
                     data.append(article)
                 else:

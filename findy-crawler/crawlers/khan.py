@@ -1,6 +1,7 @@
 import requests
 import time
 
+from datetime import datetime
 from bs4 import BeautifulSoup
 from komoran import komoran # 형태소
 from tfidf import tf_idf # TF-IDF
@@ -54,6 +55,11 @@ def fetch_article_content(article_url):
         else:
             headline = "제목 없음"
 
+        # 이미지 추출
+        div = soup.select_one("div.art_body")
+        img_tag = div.select_one("img")
+        img = img_tag.get("src")
+
         # 내용
         content_tag = soup.select_one("div.art_body")
         content = content_tag.get_text(strip=True) if content_tag else "내용 없음"
@@ -62,6 +68,15 @@ def fetch_article_content(article_url):
         date_tag = soup.select_one("div.date p")
         published_time = date_tag.get_text(strip=True) if date_tag else "시간 없음"
         time = clean_datetime(published_time)
+
+        last_time = time.replace('.','-')
+
+        try:
+            dt = datetime.strptime(last_time, "%Y-%m-%d %H:%M")
+            last_time = dt.strftime("%Y-%m-%dT%H:%M:00.000Z")
+            print(last_time)
+        except ValueError:
+            print("시간 형식 오류:", last_time)
         
         # 형태소
         nouns, pos_result = komoran(content)
@@ -76,6 +91,7 @@ def fetch_article_content(article_url):
 
         return {
             "headline": headline,
+            "img": img,
             "content": content,
             "tfidf_keywords": tfidf_keywords,
             "textrank_keywords": textrank_kw,
@@ -83,7 +99,7 @@ def fetch_article_content(article_url):
             "category": category,
             "source": "khan",
             "summary": summary_sentences,
-            "time": time
+            "time": last_time
         }
 
     except Exception as e:
@@ -94,16 +110,27 @@ def clean_datetime(text):
     text = text.replace("입력 ", "")
     time = text.replace(".", "-")
     return time
+    
+def convert_category(cat):
+    for key in category_mapping:
+        if key in cat:
+            return category_mapping[key]
+    return cat
 
 # 실행 흐름
-# khan 전용 매핑
+# khan 전용 매핑(스포츠 없음)
 category_mapping = {
-    "life/health/articles": "health"
+    "economy": "경제",
+    "opinion": "오피니언",
+    "national": "사회",
+    "life/health/articles": "건강",
+    "culture": "연예/문화"
 }
-# categories = ["economy", "opinion", "national", "life/health/articles", "culture"]
-categories = ["economy"]
+categories = ["economy", "opinion", "national", "life/health/articles", "culture"]
+# categories = ["culture"]
 data = []
 for category in categories:
+    print("khan - ", category)
     # 반복할 페이지 수
     for i in range(1):
         headlines = fetch_headlines(category, i+1)
@@ -115,7 +142,12 @@ for category in categories:
 
                 if article:
                     # 출력전에 교체
-                    converted_category = category_mapping.get(category, category)
+                    converted_category = convert_category(category)
+                    article["category"] = converted_category
+
+                    print("결과 => ")
+                    for key, value in article.items():
+                        print(f"{key}:\n{value}\n")
 
                     data.append(article)
                 else:

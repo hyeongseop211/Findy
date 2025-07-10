@@ -1,53 +1,77 @@
+# 🕵️‍♂️ Findy: 뉴스 검색 엔진
+
+<img src="Findy_logo_white.png" alt="Findy_white 로고" width="200" color="white"/> <img src="Findy_logo_black.png" alt="Findy 로고" width="200"/>
+
+**Findy**는 다양한 뉴스 플랫폼에서 수집한 기사 데이터를 기반으로, 
+📡 실시간 수집 + 🧠 형태소 분석 + 🔍 고속 검색 + 📊 랭킹 정렬 기능을 제공하는 **뉴스 검색 엔진**입니다.
+
+
+---
+
+## 🌟 주요 기능 (기여도: 상: ⭐ / 중: ★ / 하: ☆)
+> 기능별 개발 현황과 기여도를 함께 표시합니다.
+
+| 기능명 | 설명 | 기여도 |
+|--------|------|--------|
+| **다크모드** | 뉴스 검색 화면에서 다크모드를 지원하여 사용자 편의성 향상 | 하 ☆ |
+| **다국어 지원** | 메뉴 및 콘텐츠를 다국어로 설정 가능, 글로벌 사용자 편의성 제공 | 하 ☆ |
+| **웹 크롤러 기반 뉴스 수집** | Python 로봇으로 뉴스 사이트에서 기사 주기적 수집 | 상 ⭐ |
+| **뉴스 데이터 실시간 동기화** | 수집한 데이터 Monstache를 사용한 실시간 데이터 동기화 | 상 ⭐ |
+| **형태소 분석 기반 키워드 처리** | Komoran, TF-IDF, TextRank, Nori로 키워드 추출 및 검색 | 상 ⭐ |
+| **자동완성 기능** | 검색어 입력 시 실시간으로 관련 키워드 추천 | 상 ⭐ |
+| **많이 본 기사 목록** | 사용자 열람 기준으로 인기 뉴스 목록 제공 (00:00 초기화) | 상 ⭐ |
+
+⏳ *개발 예정 기능*
+
+| 기능명 | 설명 | 진행 상황 |
+|--------|------|-----------|
+| **모바일지원** | 분석된 뉴스 데이터를 빠르게 검색할 수 있도록 색인 처리 | 중 ★ |
+| **개인화 뉴스 추천** | 사용자 검색 이력을 바탕으로 맞춤형 뉴스 추천 제공 | 하 ☆ |
+| **인기 키워드 트렌드 차트** | 현재 시점 기준 인기 키워드 시각화 | 중 ★ |
+
+
+---
+
+## 🛠 기술 스택
+
+- 🎨 Frontend<br>
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white" height="25" /> <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white" height="25" /> <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black" height="25" /> <img src="https://img.shields.io/badge/React--61DAFB?style=flat&logo=react" height="25" />
+
+- 🔧 Backend<br>
+<img src="https://img.shields.io/badge/Java-17-007396?style=flat&logo=java&logoColor=white" height="25" /> <img src="https://img.shields.io/badge/SpringBoot-6DB33F?style=flat&logo=springboot&logoColor=white" height="25" /> <img src="https://img.shields.io/badge/Fetch-00A9E0?style=flat&logo=javascript&logoColor=white" height="25" />
+
+- 🔍 수집 및 처리 <br>
+   <details>
+     <summary><img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white" height="25" /></summary>
+     <pre>
+       <img src="https://img.shields.io/badge/Web%20Robot-00B8D4?style=flat&logo=web&logoColor=white" height="25" />
+       <img src="https://img.shields.io/badge/Komoran-형태소분석기-00B894?style=flat" height="25" />
+       <img src="https://img.shields.io/badge/TextRank-키워드추출-0984e3?style=flat" height="25" />
+       <img src="https://img.shields.io/badge/TF--IDF-키워드추출-0984e3?style=flat" height="25" />
+       <img src="https://img.shields.io/badge/Selenium-43B02A?style=flat&logo=selenium&logoColor=white" height="25" />
+       <img src="https://img.shields.io/badge/BeautifulSoup-3C8039?style=flat&logo=beautifulsoup&logoColor=white" height="25" />
+     </pre>
+   </details>
+
+- 🧠 검색 및 분석 <br>
+   <img src="https://img.shields.io/badge/Elasticsearch-005571?style=flat&logo=elasticsearch&logoColor=white" height="25" />
+
+- 💾 데이터 저장소 <br>
+   <img src="https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white" height="25" /> <br>
+
+- ☁️ 실행 환경 (Infra)<br>
+<img src="https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white" height="25" /><br>
+`Elasticsearch / MongoDB / MySQL 실행 환경 구성용`
+
+- 🛠 개발 도구 & 빌드<br>
+   <img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=gradle&logoColor=white" height="25" />
+
+
+---
+
 <details>
-<summary>application.properties</summary>
-# ===========================================
-# Findy 뉴스 검색 엔진 - Spring Boot 설정
-# Architecture: React(3000) + Spring Boot(8485) + MongoDB(27017)
-# ===========================================
-
-spring.application.name=Findy
-server.port=8485
-
-spring.data.mongodb.uri=mongodb://localhost:27017/newsdata
-
-spring.web.cors.allowed-origins=http://localhost:3000
-spring.web.cors.allowed-methods=GET,POST,PUT,DELETE,OPTIONS
-spring.web.cors.allowed-headers=*
-
-logging.level.com.boot=DEBUG
-logging.level.org.springframework.data.mongodb=DEBUG
-logging.pattern.console=[%d{yyyy-MM-dd HH:mm:ss}] [%level] %logger{36} - %msg%n
-
-spring.jpa.hibernate.ddl-auto=none
-spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-
-#spring.elasticsearch.rest.uris=http://localhost:9200
-#spring.kafka.bootstrap-servers=localhost:9092
-</details>
-
-# 🔍 Findy - 실시간 뉴스 검색 엔진
-
-**MongoDB + Spring Boot + React + Python 크롤러**를 활용한 종합 뉴스 검색 플랫폼
-
-## 📋 프로젝트 개요
-
-Findy는 다음과 같은 기술 스택으로 구성된 실시간 뉴스 검색 엔진입니다:
-
-### 🏗️ **전체 시스템 아키텍처**
-```
-🐍 Python Crawler → 🍃 MongoDB → ☕ Spring Boot API → ⚛️ React Frontend
-      (수집)         (저장)      (검색/API)        (사용자 UI)
-```
-
-### 🎯 **핵심 특징**
-- ✅ **실시간 뉴스 수집**: 주요 언론사 자동 크롤링 (77건+ 수집 완료)
-- ✅ **고속 검색**: MongoDB 정규식 기반 텍스트 검색
-- ✅ **스마트 태그**: TF-IDF, TextRank 기반 키워드 추출
-- ✅ **반응형 UI**: 모던 React + TypeScript 인터페이스
-- ✅ **RESTful API**: 확장 가능한 API 아키텍처
-
-## 📁 프로젝트 구조
-
+  <summary>📁 전체 프로젝트 구조</summary>
+  <pre>
 ```
 Findy-main/
 ├── 🖥️ Findy/                    # Spring Boot 백엔드
@@ -67,56 +91,117 @@ Findy-main/
 │   └── utils/                 # 유틸리티 함수
 └── 📚 docs/                    # 문서 파일
 ```
+  </pre>
+</details>
 
-## 🚀 빠른 시작
 
-### 1. 사전 요구사항
+## MongoDB
+<img src="MongoDB.png" alt="MongoDB"/>
+
+
+## Elasticsearch
+<img src="Elasticsearch.png" alt="Elasticsearch"/>
+
+
+## 화면 설명
+
+### 📰 당일 뉴스 랜덤 셀렉션 (메인 페이지) <br><br>
+   <img src="README_img/main_img.png"/><br><br>
+
+   🔄 사용자에게 다양한 새로운 뉴스 제공!<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 페이지를 새로 고침할 때마다 기사 조합이 바뀌어, 같은 뉴스 페이지라도 늘 새로운 첫인상을 경험할 수 있습니다.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 수많은 기사중, 오늘 뉴스들로만 쏙쏙 골라주는 스마트한 메인입니다.<br><br><br>
+
+### 🌙 다크모드 <br><br>
+   <img src="README_img/dark_img.png"/><br><br>
+
+   👀 사용자의 눈을 보호하고, 세련된 사용자 경험을 제공!<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 단순한 색상 반전이 아닌, 전체 UI 전반에 걸쳐 일관된 스타일과 분위기를 유지하로고 설계되었습니다.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 로컬 스토리지(LocalStorage)를 통해 해당설정이 저장됩니다.<br><br><br>
+   
+
+### 🧭사이드 위젯기능 (좌/우 사이드) <br><br>
+   <img src="README_img/left_img.png"/> <img src="README_img/right_img.png"/><br><br>
+  
+   📈 왼쪽 사이드 - 실시간 TOP 5 뉴스!<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 당일 뉴스중 가장 조회수가 높은 기사 5개를 실시간으로 집계해 보여줍니다.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 매일 00:00 기준으로 초기화 되어, 새로운 하루의 인기 기사를 제공합니다.<br><br>
+   🗞 오른쪽 사이드 - 언론사별 뉴스 보기!
+&nbsp;&nbsp;&nbsp;&nbsp;- Findy가 수집한 다양한 언론사 목록이 표시됩니다.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 원하는 언론사를 클릭하면, 해당 언론사의 전체 뉴스 기사 목록이 화면에 출력됩니다.<br><br><br>
+
+### 🗂️카테고리별 뉴스 <br><br>
+   <img src="README_img/category_img.png"/><br><br>
+
+   🔍 검색어 입력 전, 카테고리 선택!<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 검색어 입력 전 카테고리를 클릭하면, 해당 카테고리에 속한 뉴스 기사들만 선별하여 보여줍니다.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 카테고리를 선택하고 검색어 입력하여 검색하면 해당 카테고리 안에서 검색이 가능합니다.<br><br><br>
+
+### ✨실시간 자동완성 기능 <br><br>
+   <img src="README_img/auto_img.png"/><br><br>
+
+   💡 실시간 자동완성 추천!<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 뉴스 수집시 추출괸 수천 개의 키워드가 자동완성의 기반이 되며, 입력한 문자열과 가장 유사한 키워드들을 우선 순위로 정렬하여 하단에 실시간으로 보여줍니다.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 검색어의 오타, 유사어, 부분 입력에도 대응할 수 있어, 사용자는 더 적은 입력으로 더 정확한 결과에 도달할 수 있습니다.<br><br><br>
+
+### 🤖AI 검색어 설명 기능 <br><br>
+   <img src="README_img/ai_img.png"/><br><br>
+
+   📚 내가 검색하는건 무엇일까!<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 검색어를 검색하면 검색어 관련 뉴스 기사만 보여주는게 아니라 검색어가 뜻하는 바를 AI가 요약해서 사용자에게 먼저 보여줍니다.<br><br><br>
+
+### 📎뉴스 더보기 기능 <br><br>
+   <img src="README_img/news_img.png"/><br><br>
+
+   🔽 자세하게 보기!<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- 사용자가 "뉴스 더보기" 버튼을 클릭하면 해당 기사를 더 자세하게 볼 수 있습니다.<br><br><br>
+
+
+   <details>
+     <summary>### 🚀 실행하기 </summary>
+     <pre>
+## 사전 요구사항
 - Java 17+
 - Node.js 16+
 - Python 3.8+
 - MongoDB 4.4+
 
-### 2. 의존성 설치
-
+## 의존성 설치
 **Python 크롤러:**
 ```bash
 cd findy-crawler
 pip install -r requirements.txt
 ```
-<details>
-<summary>requirements.txt</summary>
 
-### 웹 크롤링 관련
+## 웹 크롤링 관련
 requests>=2.25.0
 beautifulsoup4>=4.9.0
 selenium>=4.0.0
 lxml>=4.6.0
 
-### 데이터베이스 연결
+## 데이터베이스 연결
 pymongo>=4.0.0
 
-### 텍스트 처리 및 분석 (기본 패키지만)
+## 텍스트 처리 및 분석 (기본 패키지만)
 konlpy==0.6.0  
 scikit-learn==1.3.2  
 
-### 웹 서버 (API 제공용)
+## 웹 서버 (API 제공용)
 fastapi>=0.68.0
 uvicorn>=0.15.0
 
-### 기타 유틸리티
+## 기타 유틸리티
 python-dotenv>=0.19.0
 schedule>=1.1.0 
 </details>
 
-**React 프론트엔드:**
+**React 프론트엔드**
 ```bash
 cd findy-frontend
 npm install
 ```
-
-### 3. 실행
-
-1. **MongoDB 시작**
+**백엔드**
+1. **MongoDB, Elasticsearch, Monstache시작**
 2. **백엔드 실행:**
    ```bash
    cd Findy
@@ -132,315 +217,5 @@ npm install
    cd findy-crawler
    python main.py
    ```
-
-## 🌐 접속 주소
-
-- **프론트엔드**: http://localhost:3000
-- **백엔드 API**: http://localhost:8485
-- **MongoDB**: mongodb://localhost:27017
-
-## 🔧 주요 기능
-
-### ✅ **완료된 기능**
-- 🔍 **고급 검색**: 키워드 + 카테고리 조합 검색
-- 📂 **카테고리 필터링**: 경제(26건), 오피니언(15건), 건강(15건), 사회(15건) 등
-- 🏷️ **스마트 태그**: 중복 제거 로직으로 정확한 태그 표시
-- 📱 **반응형 UI**: 모바일/데스크톱 완벽 지원
-- 🔄 **실시간 업데이트**: MongoDB 기반 데이터 동기화
-- ⚡ **페이징**: 대용량 데이터 효율적 처리 (12개씩 표시)
-
-### 🎯 **지원 언론사 (실제 수집 완료)**
-- **한겨레신문** ✅ (59건) - 기사 제목이랑 날짜 크롤링 안됨 
-- **경향신문** ✅ (10건)  
-- **연합뉴스** ✅ (8건)
-- **조선일보** 🔧 (크롤러 완성, 테스트 필요)
-- **동아일보** 🔧 (크롤러 완성, 테스트 필요)
-- **이데일리** 🔧 (크롤러 완성, 테스트 필요)
-
-### 📊 **수집된 데이터 현황**
-- **총 뉴스 수**: 77건
-- **카테고리 분포**:
-  - 경제: 26건 
-  - 오피니언: 15건 
-  - 건강: 15건 
-  - 사회: 15건 
-  - 연예/문화: 2건 
-  - 정치: 1건 
-  - 스포츠: 1건 
-
-## 🛠️ 기술 스택
-
-### 🖥️ **Backend (Spring Boot)**
-- **Spring Boot 2.7.13**: REST API 서버 (포트: 8485)
-- **MongoDB**: NoSQL 데이터베이스 (포트: 27017)
-- **Spring Data MongoDB**: Repository 패턴 데이터 액세스
-- **Lombok**: 코드 간소화
-- **SLF4J**: 로깅 시스템
-- **Java 17**: 프로그래밍 언어
-
-### 🎨 **Frontend (React)**  
-- **React 18**: 컴포넌트 기반 UI (포트: 3000)
-- **TypeScript**: 타입 안전성 보장
-- **React Router DOM**: SPA 라우팅
-- **Axios**: HTTP 클라이언트
-- **CSS Modules**: 컴포넌트별 스타일링
-- **Proxy 설정**: 개발 시 CORS 해결
-
-### 🐍 **Crawler (Python)**
-- **Python 3.8+**: 크롤링 엔진
-- **BeautifulSoup4**: HTML 파싱
-- **Selenium**: 동적 페이지 처리
-- **PyMongo**: MongoDB 연동
-- **Requests**: HTTP 클라이언트
-- **Komoran/OKT**: 한국어 형태소 분석
-- **TF-IDF/TextRank**: 키워드 추출
-
-### 🗄️ **데이터베이스 (MongoDB)**
-- **컬렉션**: `newsdata.news`
-- **인덱싱**: URL 기반 중복 방지
-- **텍스트 검색**: 정규식 기반 검색
-- **Document 구조**: JSON 형태 유연한 스키마
-
-## 📊 API 엔드포인트
-
-### 🔍 **검색 API**
-```bash
-GET /api/search?q={keyword}&category={category}&page={page}&size={size}
-
-# 예시:
-GET /api/search?q=경제&page=0&size=12          # 경제 관련 뉴스 검색
-GET /api/search?category=정치&page=0&size=12     # 정치 카테고리 필터링
-GET /api/search?q=대통령&category=정치&page=0     # 키워드 + 카테고리 조합
-```
-
-**응답 형태:**
-```json
-{
-  "content": [
-    {
-      "id": "6842c5a487e59392d332a2ff",
-      "title": "뉴스 제목",
-      "content": "뉴스 본문...",
-      "category": "경제",
-      "source": "hani",
-      "publishedAt": "2025-01-06T09:00:00Z",
-      "url": "https://...",
-      "tags": ["경제", "금융", "정책"],
-      "score": 0.95
-    }
-  ],
-  "totalElements": 77,
-  "totalPages": 7,
-  "number": 0,
-  "size": 12
-}
-```
-
-### 🤖 **크롤러 관리 API**
-```bash
-GET /api/crawler/status                # 크롤러 상태 조회
-POST /api/crawler/run                  # 크롤러 실행
-```
-
-### 🎯 **추가 API**
-```bash
-GET /api/search/autocomplete?q={query}  # 자동완성 제안
-GET /api/search/popular                 # 인기 검색어
-```
-
-## 🔧 상세 설정
-
-### 📡 **MongoDB 연결 설정**
-
-**Spring Boot 설정** (`Findy/src/main/resources/application.properties`):
-```properties
-# MongoDB 연결 (핵심 설정!)
-spring.data.mongodb.uri=mongodb://localhost:27017/newsdata
-
-# 서버 포트 (React와 구분)
-server.port=8485
-
-# 로깅 설정
-logging.level.com.boot.findy=DEBUG
-```
-
-**Python 크롤러 설정** (`findy-crawler/config/settings.py`):
-```python
-# MongoDB 설정
-MONGODB_HOST = 'localhost'
-MONGODB_PORT = 27017
-MONGODB_DATABASE = 'newsdata'
-MONGODB_COLLECTION = 'news'
-
-# 크롤링 설정
-CRAWL_DELAY = 1  # 초 단위
-MAX_ARTICLES_PER_SITE = 100
-```
-
-### 🗂️ **데이터 구조 (MongoDB Document)**
-```json
-{
-  "_id": "6842c5a487e59392d332a2ff",
-  "headline": "뉴스 제목",
-  "url": "https://www.hani.co.kr/arti/...",
-  "content": "뉴스 본문 전체 내용...",
-  "time": "2025-01-06 17:38",
-  "category": "economy",
-  "source": "hani",
-  "tfidf_keywords": ["경제", "정책", "금융"],
-  "textrank_keywords": ["대통령", "정부"],
-  "summary": ["핵심 문장 1", "핵심 문장 2"],
-  "tags": ["경제", "정책"]
-}
-```
-
-## 📈 성능 및 특징
-
-### ⚡ **성능 지표**
-- **검색 속도**: 평균 100ms 이하 (MongoDB 인덱싱)
-- **크롤링 속도**: 시간당 1000+ 기사 (병렬 처리)
-- **페이징**: 12개씩 효율적 처리
-- **메모리 사용량**: 최적화된 DTO 구조
-
-### 🛡️ **안정성 features**
-- **예외 처리**: 모든 API에 try-catch 블록
-- **중복 방지**: URL 기반 upsert 연산
-- **로깅**: SLF4J 로거로 디버깅 지원
-- **타입 안정성**: TypeScript로 런타임 에러 최소화
-
-### 🔄 **확장성**
-- **모듈화**: 크롤러별 독립적 개발
-- **RESTful API**: 다른 클라이언트 연동 가능
-- **MongoDB 샤딩**: 수평 확장 지원
-- **컴포넌트 기반**: React 재사용 가능한 UI
-
-## 🏗️ **개발 과정 및 해결한 문제들**
-
-### 🔧 **1단계: 시스템 구축**
-- ✅ MongoDB 설치 및 설정 (27017 포트)
-- ✅ Spring Boot MongoDB 연동 구현
-- ✅ Python 크롤러 개발 및 실행 (77건 뉴스 수집)
-- ✅ React 프론트엔드 검색 기능 구현
-- ✅ REST API 엔드포인트 구축
-
-### 🐛 **2단계: 주요 문제 해결**
-
-**❌ 문제 1: 카테고리 불일치**
-- **증상**: 헤더 클릭 시 더미데이터 출력
-- **원인**: 프론트엔드('경제') ↔ 백엔드('economy') 매핑 오류
-- **해결**: 카테고리 변환 함수 구현 (`convertDisplayCategoryToActual`)
-
-**❌ 문제 2: 의존성 충돌**  
-- **증상**: Spring Boot 서버 실행 실패 ("mybatis-config.xml cannot be opened")
-- **원인**: MyBatis 의존성 남아있음 (기존 환경과 충돌)
-- **해결**: build.gradle에서 MyBatis 완전 제거, MongoDB만 유지
-
-**❌ 문제 3: 태그 중복 표시**
-- **증상**: 뉴스 태그가 ["뉴스", "뉴스", "경제"] 형태로 중복
-- **원인**: 크롤러에서 tags 필드 미생성 + 컨트롤러에서 기본값 중복 추가
-- **해결**: 스마트 태그 생성 로직 구현 (중복 방지)
-
-### 🧹 **3단계: 프로젝트 정리**
-- ✅ **불필요한 파일 대대적 정리**: JSP, 중복 크롤러, MyBatis 설정 등
-- ✅ **깔끔한 구조 완성**: Python + Spring Boot + React
-- ✅ **문서 업데이트**: README 및 가이드 정리
-
-## ⚖️ **기존 MyBatis 환경과의 차이점**
-
-| 구분 | **기존 (MyBatis)** | **현재 (MongoDB)** |
-|------|-------------------|-------------------|
-| **데이터베이스** | MySQL/MariaDB | MongoDB |
-| **ORM/ODM** | MyBatis (SQL 매핑) | Spring Data MongoDB |
-| **쿼리 방식** | XML/Annotation SQL | Method 기반 쿼리 |
-| **데이터 구조** | 관계형 테이블 | Document (JSON) |
-| **의존성** | `mybatis-spring-boot-starter` | `spring-boot-starter-data-mongodb` |
-| **설정 파일** | `mybatis-config.xml` | `application.properties` |
-| **검색 기능** | LIKE 연산자 | 정규식 기반 텍스트 검색 |
-| **스키마** | 고정 테이블 구조 | 유연한 Document 구조 |
-
-## 📁 **상세 파일 구조**
-
-### 🏗️ **전체 프로젝트 구조**
-```
-📁 Findy-main/
-├── 🖥️ Findy/                      # Spring Boot 백엔드
-│   ├── 📁 src/main/java/com/boot/
-│   │   ├── 🚀 FindyApplication.java       # 메인 애플리케이션
-│   │   ├── 📁 controller/
-│   │   │   └── 🔌 NewsController.java     # REST API 컨트롤러
-│   │   ├── 📁 service/
-│   │   │   └── ⚙️ NewsService.java        # 비즈니스 로직
-│   │   ├── 📁 repository/
-│   │   │   └── 💾 NewsRepository.java     # MongoDB Repository
-│   │   └── 📁 dto/
-│   │       └── 📦 NewsDTO.java            # 데이터 전송 객체
-│   ├── 📁 src/main/resources/
-│   │   └── ⚙️ application.properties      # Spring Boot 설정
-│   └── 🔧 build.gradle                   # 의존성 관리
-├── 🎨 findy-frontend/               # React 프론트엔드
-│   ├── 📁 src/
-│   │   ├── 🎯 App.tsx                    # 메인 앱 컴포넌트
-│   │   ├── 📁 components/
-│   │   │   ├── 🏠 HomePage/              # 메인 페이지
-│   │   │   ├── 🔍 SearchPage/            # 검색 결과 페이지
-│   │   │   ├── 🏷️ NewsCard/             # 뉴스 카드 컴포넌트
-│   │   │   ├── 📋 Header/                # 상단 네비게이션
-│   │   │   └── 👣 Footer/                # 하단 푸터
-│   │   └── 📁 types/                     # TypeScript 타입 정의
-│   └── 📦 package.json                  # NPM 의존성
-├── 🐍 findy-crawler/               # Python 크롤러
-│   ├── 🎯 main.py                       # 크롤러 메인 실행점
-│   ├── 📁 crawlers/
-│   │   ├── 📰 hani.py                   # 한겨레 크롤러
-│   │   ├── 📰 khan.py                   # 경향신문 크롤러
-│   │   ├── 📰 yna.py                    # 연합뉴스 크롤러
-│   │   ├── 💾 mongo_save.py             # MongoDB 저장
-│   │   ├── 🔍 tfidf.py                  # TF-IDF 키워드 추출
-│   │   └── 🔍 textrank.py               # TextRank 알고리즘
-│   ├── 📁 config/
-│   │   └── ⚙️ settings.py               # 크롤러 설정
-│   └── 📋 requirements.txt              # Python 의존성
-├── 🚀 start-minimal.bat            # 원클릭 실행 스크립트
-├── 📄 README.md                    # 이 파일
-└── 📋 IMPLEMENTATION_GUIDE.md       # 구현 가이드
-```
-
-### 🎯 **파일별 역할과 선택 이유**
-
-| 파일 | 역할 | 선택 이유 |
-|------|------|-----------|
-| **NewsController.java** | REST API 엔드포인트 제공 | Spring Boot 표준 아키텍처 |
-| **NewsService.java** | 비즈니스 로직 분리 | 단일 책임 원칙 |
-| **NewsRepository.java** | 데이터 접근 계층 | Spring Data MongoDB 활용 |
-| **NewsDTO.java** | 데이터 전송 객체 | MongoDB Document 매핑 |
-| **mongo_save.py** | 크롤링 데이터 저장 | Python-MongoDB 연동 |
-| **SearchPage.tsx** | 검색 UI 컴포넌트 | React 컴포넌트 기반 개발 |
-
-
-### 🛠️ **개발 환경 설정**
-1. **Repository Fork & Clone**
-```bash
-git clone https://github.com/your-username/findy.git
-cd findy/Findy-main
-```
-
-2. **개발 브랜치 생성**
-```bash
-git checkout -b feature/새로운기능이름
-```
-
-3. **변경 사항 커밋**
-```bash
-git commit -m "feat: 새로운 기능 추가"
-```
-
-4. **Pull Request 생성**
-```bash
-git push origin feature/새로운기능이름
-```
-
-
-
----
-
-**Findy** - 더 나은 뉴스 검색 경험을 제공합니다. 🚀
+  </pre>
+</details>

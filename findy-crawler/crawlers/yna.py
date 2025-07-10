@@ -73,16 +73,15 @@ def clean_datetime(text):
 
 # 실행 흐름
 # 카테고리 종류
-# categories = ["economy", "opinion", "society", "hanihealth", "sports", "culture"]
 # donga 전용 매핑
 category_mapping = {
-    "Economy": "economy",
-    "Opinion": "opinion",
-    "Society": "society",
-    "Health": "hanihealth",
-    "Sports": "sports",
-    "Culture": "culture",
-    "Entertainment": "culture"
+    "Economy": "경제",
+    "Opinion": "오피니언",
+    "Society": "사회",
+    "Health": "건강",
+    "Sports": "스포츠",
+    "Culture": "연예/문화",
+    "Entertainment": "연예/문화"
 }
 categories = ["economy", "politics", "society", "sports", "culture"]  # 연합뉴스 카테고리
 data = []
@@ -90,11 +89,12 @@ data = []
 print("=== 연합뉴스 크롤링 시작 ===")
 
 for category in categories:
+    print("yna - ", category)
     print(f"\n[카테고리] {category} 수집 중...")
     headlines = fetch_headlines(category, 1)  # 첫 페이지만
 
     if headlines:
-        print(f"  ✓ {len(headlines)}개 기사 링크 발견")
+        print(f"  {len(headlines)}개 기사 링크 발견")
         for idx, item in enumerate(headlines[:5], start=1):  # 각 카테고리당 5개만
             print(f"  기사 {idx}/5 수집 중...")
             article = fetch_article_content(item['url'])
@@ -103,16 +103,17 @@ for category in categories:
                 # headline이 리스트인 경우 첫 번째 요소 사용
                 if isinstance(article['headline'], list):
                     article['headline'] = article['headline'][0].text.strip() if article['headline'] else "제목 없음"
-                
+                # 카테고리 매핑
+                converted_category = category_mapping.get(category, category)
                 article['category'] = category
                 data.append(article)
-                print(f"    ✓ 제목: {article['headline'][:50]}...")
+                print(f"     제목: {article['headline'][:50]}...")
             else:
-                print(f"    ✗ 본문 수집 실패")
+                print(f"     본문 수집 실패")
 
             time.sleep(0.5)
     else:
-        print(f"  ✗ 기사 목록 수집 실패")
+        print(f"   기사 목록 수집 실패")
 
 print(f"\n=== 수집 완료: 총 {len(data)}개 기사 ===")
 
